@@ -1,12 +1,16 @@
 extends KinematicBody2D
 
 export (int) var speed = 400
-export (int) var jump = -600
+export (int) var jump_first = 600
+export (int) var jump_second = 600
+export (float) var jump_delay = 0.166667 # Add 1/6 of a second of delay before a second jump can be performed.
 export (int) var GRAVITY = 1200
+
 
 const UP = Vector2(0,-1)
 var velocity = Vector2()
-var jump_count = 2
+var can_jump = true # Can the player jump even in midair?
+var current_jump_delay = 0
 
 func do_move():
 	velocity.x = 0
@@ -16,22 +20,29 @@ func do_move():
 		velocity.x -= speed
 
 func do_jump():
-	if Input.is_action_pressed('move_jump') and jump_count > 0:
-		velocity.y = jump
-		jump_count -= 1
+	if Input.is_action_pressed('move_jump') and can_jump:
+		if is_on_floor():
+			velocity.y -= jump_first
+			current_jump_delay = jump_delay
+		elif not is_on_floor() and current_jump_delay <= 0: # Condition to do second jump
+			velocity.y = 0
+			velocity.y -= jump_second
+			can_jump = false
+			
+func reset_jump():
+	can_jump = true
+	current_jump_delay = 0
 
 func _input(event):
 	do_jump()
 	
 func _physics_process(delta):
 	velocity.y += delta * GRAVITY
+	print(current_jump_delay)
 	do_move()
 	velocity = move_and_slide(velocity, UP)
 	if is_on_floor():
-		print("touch down!")
 		reset_jump()
-	else:
-		print("not touch down!")
+	elif not is_on_floor() and current_jump_delay > 0:
+		current_jump_delay -= (delta + 0.000001)
 	
-func reset_jump():
-	jump_count = 2

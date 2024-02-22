@@ -6,13 +6,16 @@
 [node name="Root" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 87, 193 )
+position = Vector2( 89, 340 )
 
 [node name="Ground" parent="." instance=ExtResource( 1 )]
-position = Vector2( 507.708, 363.86 )
+position = Vector2( 511.758, 517.806 )
 
 [node name="Ground2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 789.149, 294.054 )
+position = Vector2( 793.199, 448 )
 
 [node name="Ground3" parent="." instance=ExtResource( 1 )]
-position = Vector2( 225.95, 294.562 )
+position = Vector2( 230, 448.508 )
+
+[node name="Ground4" parent="." instance=ExtResource( 1 )]
+position = Vector2( 510, 215 )
